@@ -24,18 +24,46 @@ function initialize() {
     document.getElementById('import-file').addEventListener('change', importDataFromFile);
     document.getElementById('resetBtn').addEventListener('click', resetToDefault);
     
-    // [关键修改] 使用 setTimeout 确保在 DOM 完全渲染和计算后才加载数据和绘图
-    setTimeout(loadData, 100); // 延迟100毫秒，这个时间足够了
+    // 使用 setTimeout 确保在 DOM 完全渲染和计算后才加载数据和绘图
+    setTimeout(loadData, 100);
+    // [新增] 主题切换逻辑
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    themeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const theme = button.dataset.theme;
+            document.body.className = ''; // 先清除所有 class
+            document.body.classList.add(`theme-${theme}`);
+
+            // 更新按钮的激活状态
+            themeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // 可选：将主题选择保存到 localStorage
+            localStorage.setItem('familyTreeTheme', theme);
+        });
+    });
+
+    // [新增] 页面加载时，应用上次保存的主题
+    const savedTheme = localStorage.getItem('familyTreeTheme');
+    if (savedTheme) {
+        const savedThemeButton = document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`);
+        if (savedThemeButton) {
+            savedThemeButton.click(); // 模拟点击以应用主题和样式
+        }
+    } else {
+        // 默认激活亮色模式按钮
+         document.querySelector('.theme-btn[data-theme="light"]').classList.add('active');
+    }
 }
 
 // --- 数据与绘图核心 ---
 function loadData(dataArray = null) {
-    console.log("Loading data..."); // 添加日志
+    console.log("Loading data...");
     const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     // 注意：initialFamilyData 来自 data.js 文件
     familyData = dataArray || (savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(initialFamilyData)));
     
-    console.log("Family data loaded:", familyData); // 添加日志，看看数据对不对
+    console.log("Family data loaded:", familyData);
 
     if (!familyData.find(p => p.id === focalPersonId)) {
         focalPersonId = familyData.length > 0 ? familyData[0].id : null;
@@ -75,6 +103,7 @@ function buildDataTableForFocalPerson(personId) {
     dataTable.addColumn('string', 'ToolTip');
 
     familyData.forEach(person => {
+        // 避免为有配偶的女性创建独立节点，她将被包含在配偶节点中
         if (person.gender === 'female' && person.spouseId) {
             const spouseExists = familyData.some(p => p.id === person.spouseId);
             if (spouseExists) {
@@ -83,20 +112,27 @@ function buildDataTableForFocalPerson(personId) {
         }
         const spouse = person.spouseId ? familyData.find(p => p.id === person.spouseId) : null;
         const nodeContent = formatNodeContent(person, spouse);
-        const managerId = person.fatherId || null;
+        
+        // ==================================================================
+        // ========================= 核心修改点 =========================
+        // ==================================================================
+        // 任何一个人的管理者（Manager）优先是其父亲ID，如果没有父亲则使用母亲ID。
+        const managerId = person.fatherId || person.motherId || null;
+        // ==================================================================
+        
         dataTable.addRow([{ v: person.id, f: nodeContent.html }, managerId, person.tooltip]);
     });
     
-    // 用下面这段替换原来的 for 循环
+    // 动态设置节点的 CSS 类
     for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
         const rowId = dataTable.getValue(i, 0);
-        let className = 'google-visualization-orgchart-node'; // 先给所有节点设置基础类名
+        let className = 'google-visualization-orgchart-node'; // 基础类
         
         if(rowId === focalPersonId){
-            className += ' highlight-node'; // 如果是焦点人物，再追加高亮类名
+            className += ' highlight-node'; // 为焦点人物追加高亮类
         }
         
-        dataTable.setRowProperty(i, 'className', className); // 设置最终的类名
+        dataTable.setRowProperty(i, 'className', className);
     }
     return dataTable;
 }

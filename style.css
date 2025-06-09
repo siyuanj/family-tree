@@ -1,159 +1,211 @@
 /* ================================================================== */
 /* ========================= 全局和布局样式 ========================= */
 /* ================================================================== */
-body { font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-h1 { text-align: center; color: #343a40; font-weight: 300; letter-spacing: 1px; margin-bottom: 30px; }
-.main-container { display: flex; flex-wrap: wrap; width: 98%; max-width: 1800px; margin: 20px auto; gap: 30px; }
+body {
+    /* 基础字体和布局 */
+    font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    margin: 0;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 
+    /* [主题] 使用 CSS 变量定义颜色，默认为亮色主题 */
+    --bg-color: #f8f9fa;
+    --text-color-primary: #212529;
+    --text-color-secondary: #6c757d;
+    --panel-bg-color: #ffffff;
+    --border-color: #e9ecef;
+    --border-color-light: #f1f3f5;
+    --input-bg-color: #f8f9fa;
+    --link-color: #007bff;
+    --node-bg-color: #faf8f2;
+    --node-border-color: #e5e0d4;
+    --highlight-gradient-start: #fff9e6;
+    --highlight-gradient-end: #ffeeba;
+    --highlight-border-color: #ffd56b;
+    --highlight-shadow-color: rgba(255, 193, 7, 0.3);
+    
+    /* 应用变量 */
+    background-color: var(--bg-color);
+    color: var(--text-color-primary);
+    transition: background-color 0.4s, color 0.4s;
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-color-primary);
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    transition: color 0.4s;
+}
+
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 98%;
+    max-width: 1800px;
+    margin: 20px auto;
+    gap: 30px;
+}
 
 /* ================================================================== */
 /* ========================= 左侧控制面板样式 ======================= */
 /* ================================================================== */
-.controls { flex: 1; min-width: 320px; max-width: 380px; padding: 25px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e9ecef; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); height: fit-content; }
-.panel-section { border-top: 1px solid #f1f3f5; margin-top: 25px; padding-top: 25px; }
+.controls {
+    flex: 1;
+    min-width: 320px;
+    max-width: 380px;
+    padding: 25px;
+    background-color: var(--panel-bg-color);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    transition: background-color 0.4s, border-color 0.4s;
+}
+.panel-section { border-top: 1px solid var(--border-color-light); margin-top: 25px; padding-top: 25px; }
 .panel-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-.panel-section h2 { margin-top: 0; margin-bottom: 20px; color: #495057; font-size: 16px; font-weight: 600; padding-bottom: 15px; border-bottom: 1px solid #f1f3f5; letter-spacing: 0.5px; }
+.panel-section h2 { margin-top: 0; margin-bottom: 20px; color: var(--text-color-secondary); font-size: 16px; font-weight: 600; padding-bottom: 15px; border-bottom: 1px solid var(--border-color-light); letter-spacing: 0.5px; transition: color 0.4s, border-color 0.4s; }
 .form-group { margin-bottom: 16px; }
-.form-group label { display: block; margin-bottom: 8px; color: #495057; font-weight: 500; font-size: 14px; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; background-color: #f8f9fa; box-sizing: border-box; transition: all 0.2s ease-in-out; }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); background-color: #fff; }
+.form-group label { display: block; margin-bottom: 8px; color: var(--text-color-secondary); font-weight: 500; font-size: 14px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--input-bg-color); color: var(--text-color-primary); box-sizing: border-box; transition: all 0.2s ease-in-out; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--link-color); outline: 0; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); background-color: var(--panel-bg-color); }
 .form-group button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 500; transition: background-color 0.2s; margin-top: 10px; }
 .form-group button:hover { background-color: #0056b3; }
 .action-btn-group { display: flex; gap: 10px; }
-.action-btn { flex-grow: 1; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; background-color: rgba(248, 249, 250, 0.9); color: #495057; text-align: center; transition: all 0.2s ease-in-out; backdrop-filter: blur(4px); }
-.action-btn:hover { background-color: #e9ecef; border-color: #adb5bd; }
+.action-btn { flex-grow: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; background-color: rgba(248, 249, 250, 0.9); color: var(--text-color-secondary); text-align: center; transition: all 0.2s ease-in-out; backdrop-filter: blur(4px); }
+.action-btn:hover { background-color: var(--border-color); border-color: var(--text-color-secondary); }
 .action-btn.active { box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); background-color: #007bff; color: white; border-color: #007bff; }
 label.action-btn { line-height: 1.5; }
-#details-content h3 { margin-top: 0; margin-bottom: 10px; color: #212529; }
-#details-content p { color: #6c757d; font-size: 14px; line-height: 1.6; }
-
+#details-content h3 { margin-top: 0; margin-bottom: 10px; color: var(--text-color-primary); }
+#details-content p { color: var(--text-color-secondary); font-size: 14px; line-height: 1.6; }
 
 /* ================================================================== */
-/* =================== 核心：图表及覆盖层样式 (已修正) ================ */
+/* =================== 核心：图表及覆盖层样式 ================ */
 /* ================================================================== */
-#chart_div_container {
-    flex: 3;
-    min-width: 60%;
-    position: relative; /* 关键！作为按钮组的定位参考 */
-}
-
-/* [修正] 包裹图表的容器，它将撑开高度 */
-.chart-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; /* 占满父容器 */
-    min-height: 800px; /* 保证最小高度 */
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-/* [修正] 图表 div 现在继承父容器的高度 */
-#orgchart_div, #timeline_div {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #e9ecef;
-    background-color: #ffffff;
-    box-sizing: border-box;
-}
-
-/* 覆盖层按钮组的样式 (保持不变) */
-.chart-overlay-panel {
-    position: absolute;
-    z-index: 10;
-    padding: 12px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    backdrop-filter: blur(5px);
-}
+#chart_div_container { flex: 3; min-width: 60%; position: relative; }
+.chart-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; min-height: 800px; border-radius: 12px; overflow: hidden; }
+#orgchart_div, #timeline_div { width: 100%; height: 100%; border: 1px solid var(--border-color); background-color: var(--panel-bg-color); box-sizing: border-box; transition: background-color 0.4s, border-color 0.4s; }
+.view-hidden { opacity: 0; pointer-events: none; z-index: -1; }
+.chart-overlay-panel { position: absolute; z-index: 10; padding: 12px; background-color: rgba(255, 255, 255, 0.7); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); backdrop-filter: blur(5px); }
 .top-right { top: -65px; right: 15px; }
 .bottom-right { bottom: 20px; right: 20px; }
-
 
 /* ================================================================== */
 /* ========================= 图表节点样式 ========================= */
 /* ================================================================== */
+#orgchart_div .google-visualization-orgchart-node { border: 1px solid var(--node-border-color); border-radius: 10px; background: var(--node-bg-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 12px 16px !important; transition: all 0.3s ease; cursor: default; min-width: 180px; box-sizing: border-box; }
+#orgchart_div .google-visualization-orgchart-node:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); border-color: var(--link-color); }
+#orgchart_div .google-visualization-orgchart-node.highlight-node { background: linear-gradient(135deg, var(--highlight-gradient-start), var(--highlight-gradient-end)); border-color: var(--highlight-border-color); box-shadow: 0 6px 16px var(--highlight-shadow-color); }
+.node-name { font-size: 16px; font-weight: 600; color: var(--text-color-primary); text-decoration: none; padding: 4px 6px; border-radius: 4px; }
+.node-name:hover { background-color: rgba(0, 123, 255, 0.1); text-decoration: none; }
+.node-name.focal-person { color: #d9534f; font-size: 1.1em; }
+.node-name.spouse { color: var(--link-color); font-weight: 400; }
+.date-info { font-size: 13px; color: var(--text-color-secondary); margin-top: 6px; }
+.google-visualization-orgchart-linebottom, .google-visualization-orgchart-lineleft, .google-visualization-orgchart-lineright { border-color: var(--text-color-secondary); transition: border-color 0.4s; }
 
-/* 节点基础样式 */
-#orgchart_div .google-visualization-orgchart-node { 
-    border: 1px solid #e5e0d4; 
-    border-radius: 10px; 
-    background: #faf8f2; 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
-    padding: 12px 16px !important; 
-    transition: all 0.3s ease; 
-    cursor: default; 
-    min-width: 180px; 
-    box-sizing: border-box; 
+/* ================================================================== */
+/* ========================= 主题切换器样式 (新增) ==================== */
+/* ================================================================== */
+#theme-switcher {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background-color: var(--panel-bg-color);
+    border-radius: 10px 0 0 10px;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    z-index: 1001;
+    transition: background-color 0.4s;
+}
+.theme-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background-color: var(--input-bg-color);
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.theme-btn:hover {
+    transform: scale(1.1);
+    border-color: var(--link-color);
+}
+.theme-btn.active {
+    border-color: var(--link-color);
+    box-shadow: 0 0 10px var(--link-color);
 }
 
-/* 节点悬停效果 */
-#orgchart_div .google-visualization-orgchart-node:hover { 
-    transform: translateY(-4px) scale(1.03); 
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); 
-    border-color: #007bff; 
+/* ================================================================== */
+/* ============================ 主题定义 (新增) ====================== */
+/* ================================================================== */
+/* --- 暗色主题 --- */
+body.theme-dark {
+    --bg-color: #121212;
+    --text-color-primary: #e0e0e0;
+    --text-color-secondary: #a0a0a0;
+    --panel-bg-color: #1e1e1e;
+    --border-color: #333333;
+    --border-color-light: #282828;
+    --input-bg-color: #252525;
+    --link-color: #bb86fc;
+    --node-bg-color: #2a2a2a;
+    --node-border-color: #444444;
+    --highlight-gradient-start: #372551;
+    --highlight-gradient-end: #2d1c46;
+    --highlight-border-color: #bb86fc;
+    --highlight-shadow-color: rgba(187, 134, 252, 0.3);
 }
+body.theme-dark .chart-overlay-panel, body.theme-dark .page-overlay-panel { background-color: rgba(30, 30, 30, 0.7); }
+body.theme-dark .node-name:hover { background-color: rgba(187, 134, 252, 0.1); }
+body.theme-dark .action-btn { background-color: var(--input-bg-color); border-color: var(--border-color); color: var(--text-color-secondary); }
+body.theme-dark .action-btn:hover { background-color: var(--border-color); border-color: var(--text-color-secondary); }
+body.theme-dark .action-btn.active { background-color: var(--link-color); color: #121212; border-color: var(--link-color); }
 
-/* 高亮节点样式 */
-#orgchart_div .google-visualization-orgchart-node.highlight-node { 
-    background: linear-gradient(135deg, #fff9e6, #ffeeba); 
-    border-color: #ffd56b; 
-    box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3); 
-}
 
-/* 节点名称样式 */
-.node-name { 
-    font-size: 16px; 
-    font-weight: 600; 
-    color: #212529; 
-    text-decoration: none; 
-    padding: 4px 6px; 
-    border-radius: 4px; 
+/* --- 怀旧主题 --- */
+body.theme-sepia {
+    --bg-color: #f4f0e8;
+    --text-color-primary: #5b4636;
+    --text-color-secondary: #7d6b5a;
+    --panel-bg-color: #fdfaf3;
+    --border-color: #e4e0d8;
+    --border-color-light: #ece8e1;
+    --input-bg-color: #f4f0e8;
+    --link-color: #8c6f58;
+    --node-bg-color: #f9f5ed;
+    --node-border-color: #dcd5c9;
+    --highlight-gradient-start: #e9e2d5;
+    --highlight-gradient-end: #d9d0c0;
+    --highlight-border-color: #c5bba9;
+    --highlight-shadow-color: rgba(91, 70, 54, 0.2);
+    filter: sepia(0.1);
 }
+body.theme-sepia .chart-overlay-panel, body.theme-sepia .page-overlay-panel { background-color: rgba(253, 250, 243, 0.7); }
+body.theme-sepia .node-name:hover { background-color: rgba(140, 111, 88, 0.1); }
+body.theme-sepia .action-btn { background-color: var(--input-bg-color); border-color: var(--border-color); color: var(--text-color-secondary); }
+body.theme-sepia .action-btn:hover { background-color: var(--border-color); border-color: var(--text-color-secondary); }
+body.theme-sepia .action-btn.active { background-color: var(--link-color); color: #fdfaf3; border-color: var(--link-color); }
 
-/* 节点名称悬停效果 */
-.node-name:hover { 
-    background-color: rgba(0, 123, 255, 0.1); 
-    text-decoration: none; 
-}
-
-/* 焦点人物样式 */
-.node-name.focal-person { 
-    color: #d9534f; 
-    font-size: 1.1em; 
-}
-
-/* 配偶样式 */
-.node-name.spouse { 
-    color: #007bff; 
-    font-weight: 400; 
-}
-
-/* 日期信息样式 */
-.date-info { 
-    font-size: 13px; 
-    color: #6c757d; 
-    margin-top: 6px; 
-}
-
-/* 连接线样式 */
-.google-visualization-orgchart-linebottom, 
-.google-visualization-orgchart-lineleft, 
-.google-visualization-orgchart-lineright { 
-    border-color: #adb5bd; 
-}
 
 /* ================================================================== */
 /* ========================= 弹窗和打印样式 ======================= */
 /* ================================================================== */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 1000; }
-.modal-content { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+.modal-content { background: var(--panel-bg-color); padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); transition: background-color 0.4s; }
 .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
-.modal-actions button { flex-grow: 1; padding: 10px 15px; border-radius: 6px; border: 1px solid #ced4da; cursor: pointer; font-weight: 500; transition: all 0.2s ease-in-out; }
-#saveBtn { background-color: #007bff; color: white; border-color: #007bff; }
-#saveBtn:hover { background-color: #0056b3; }
-#cancelBtn { background-color: #f8f9fa; color: #495057; }
-#cancelBtn:hover { background-color: #e9ecef; }
-@media print { body, .main-container { margin: 0; padding: 0; } .controls, h1 { display: none !important; } #chart_div_container { width: 100%; height: auto; border: none; box-shadow: none; } }
+.modal-actions button { flex-grow: 1; padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; font-weight: 500; transition: all 0.2s ease-in-out; }
+#saveBtn { background-color: var(--link-color); color: var(--panel-bg-color); border-color: var(--link-color); }
+#saveBtn:hover { opacity: 0.8; }
+#cancelBtn { background-color: var(--input-bg-color); color: var(--text-color-secondary); }
+#cancelBtn:hover { background-color: var(--border-color); }
+@media print { body, .main-container { margin: 0; padding: 0; } .controls, h1, #theme-switcher, .page-overlay-panel, .chart-overlay-panel { display: none !important; } #chart_div_container { width: 100%; height: auto; border: none; box-shadow: none; } }
