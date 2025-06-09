@@ -6,7 +6,7 @@ const initialFamilyData = [
     { id: 'ZhuHui', name: '祝辉', gender: 'female', info: '', spouseId: 'JiangLuosheng', fatherId: null, motherId: null, tooltip: '我的奶奶' },
     { id: 'JiangJianhong', name: '蒋建宏', gender: 'male', info: '1965年生', spouseId: null, fatherId: 'JiangLuosheng', motherId: 'ZhuHui', tooltip: '伯父' },
     { id: 'JiangLiyun', name: '蒋丽云', gender: 'female', info: '', spouseId: null, fatherId: 'JiangLuosheng', motherId: 'ZhuHui', tooltip: '姑姑' },
-    { id: 'JiangJianjun', name: '蒋建军', gender: 'male', info: '1965年生', spouseId: 'LiuFang', fatherId: 'JiangLuosheng', motherId: 'ZhuHui', tooltip: '我的父亲' },
-    { id: 'LiuFang', name: '刘芳', gender: 'female', info: '', spouseId: 'JiangJianjun', fatherId: null, motherId: null, tooltip: '我的母亲' },
-    { id: 'JiangSiyuan', name: '蒋思源', gender: 'male', info: '2003年生', spouseId: null, fatherId: 'JiangJianjun', motherId: 'LiuFang', tooltip: '我' }
+    { id: 'JiangJianjun', name: '蒋建军', gender: 'male', info: '1965年生', spouseId: 'ShanLei', fatherId: 'JiangLuosheng', motherId: 'ZhuHui', tooltip: '我的父亲' },
+    { id: 'ShanLei', name: '单蕾', gender: 'female', info: '', spouseId: 'JiangJianjun', fatherId: null, motherId: null, tooltip: '我的母亲' },
+    { id: 'JiangSiyuan', name: '蒋思源', gender: 'male', info: '2003年生', spouseId: null, fatherId: 'JiangJianjun', motherId: 'ShanLei', tooltip: '我' }
 ];
