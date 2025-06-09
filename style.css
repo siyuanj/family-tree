@@ -1,211 +1,80 @@
 /* ================================================================== */
 /* ========================= 全局和布局样式 ========================= */
 /* ================================================================== */
+body { font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+h1 { text-align: center; color: #343a40; font-weight: 300; letter-spacing: 1px; margin-bottom: 30px; }
+.main-container { display: flex; flex-wrap: wrap; width: 98%; max-width: 1800px; margin: 20px auto; gap: 30px; }
 
-/* 设置页面整体字体、背景色和基础布局 */
-body {
-    font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 20px;
-    transition: background-color 0.3s;
-    -webkit-font-smoothing: antialiased; /* 在 Webkit 浏览器上优化字体渲染 */
-    text-rendering: optimizeLegibility;
-}
-
-/* 主标题样式 */
-h1 {
-    text-align: center;
-    color: #343a40;
-    font-weight: 300;
-    letter-spacing: 1px;
-    margin-bottom: 30px; /* 增加标题和下方内容的间距 */
-}
-
-/* 主容器布局 - 使用弹性盒子布局 */
-.main-container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 98%;
-    max-width: 1800px;
-    margin: 20px auto;
-    gap: 30px; /* 增加左右面板的间距 */
-}
 
 /* ================================================================== */
 /* ========================= 左侧控制面板样式 ======================= */
 /* ================================================================== */
-.controls {
-    flex: 1;
-    min-width: 320px; /* 稍微加宽 */
-    max-width: 380px;
-    padding: 25px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #e9ecef;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    height: fit-content;
-}
-
-/* 面板内每个区域的样式 */
-.panel-section {
-    border-top: 1px solid #f1f3f5;
-    margin-top: 25px;
-    padding-top: 25px;
-}
-.panel-section:first-child {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-}
-
-/* 面板区域标题 */
-.panel-section h2 {
-    margin-top: 0;
-    margin-bottom: 20px; /* 增加标题和下方内容的间距 */
-    color: #495057;
-    font-size: 16px; /* 字体稍小，更精致 */
-    font-weight: 600; /* 加粗 */
-    padding-bottom: 15px;
-    border-bottom: 1px solid #f1f3f5;
-    letter-spacing: 0.5px;
-}
-
-/* --- 表单样式 --- */
-.form-group {
-    margin-bottom: 16px;
-}
-.form-group label {
-    display: block;
-    margin-bottom: 8px; /* 增加标签和输入框的距离 */
-    color: #495057;
-    font-weight: 500;
-    font-size: 14px;
-}
-.form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    background-color: #f8f9fa;
-    box-sizing: border-box;
-    transition: all 0.2s ease-in-out;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-    background-color: #fff;
-}
-
-/* [美化] 添加成员的大按钮 */
-.form-group button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: background-color 0.2s;
-    margin-top: 10px; /* 和上方表单拉开距离 */
-}
+.controls { flex: 1; min-width: 320px; max-width: 380px; padding: 25px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e9ecef; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); height: fit-content; }
+.panel-section { border-top: 1px solid #f1f3f5; margin-top: 25px; padding-top: 25px; }
+.panel-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.panel-section h2 { margin-top: 0; margin-bottom: 20px; color: #495057; font-size: 16px; font-weight: 600; padding-bottom: 15px; border-bottom: 1px solid #f1f3f5; letter-spacing: 0.5px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; margin-bottom: 8px; color: #495057; font-weight: 500; font-size: 14px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; background-color: #f8f9fa; box-sizing: border-box; transition: all 0.2s ease-in-out; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); background-color: #fff; }
+.form-group button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 500; transition: background-color 0.2s; margin-top: 10px; }
 .form-group button:hover { background-color: #0056b3; }
-
-
-/* --- 按钮组样式（视图切换、数据管理等） --- */
-.action-btn-group {
-    display: flex;
-    gap: 10px;
-}
-.action-btn {
-    flex-grow: 1;
-    padding: 10px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    background-color: #f8f9fa;
-    color: #495057;
-    text-align: center;
-    transition: all 0.2s ease-in-out;
-}
-.action-btn:hover {
-    background-color: #e9ecef;
-    border-color: #adb5bd;
-}
-.action-btn.active {
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-/* [美化] 为导入按钮应用 action-btn 样式 */
-label.action-btn {
-    line-height: 1.5; /* 调整行高让文字垂直居中 */
-}
-
-
-/* --- 成员详情面板样式 --- */
-#details-content h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #212529;
-}
-#details-content p {
-    color: #6c757d;
-    font-size: 14px;
-    line-height: 1.6;
-}
+.action-btn-group { display: flex; gap: 10px; }
+.action-btn { flex-grow: 1; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; background-color: rgba(248, 249, 250, 0.9); /* 半透明背景 */ color: #495057; text-align: center; transition: all 0.2s ease-in-out; backdrop-filter: blur(4px); /* 毛玻璃效果 */ }
+.action-btn:hover { background-color: #e9ecef; border-color: #adb5bd; }
+.action-btn.active { box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); background-color: #007bff; color: white; border-color: #007bff; }
+label.action-btn { line-height: 1.5; }
+#details-content h3 { margin-top: 0; margin-bottom: 10px; color: #212529; }
+#details-content p { color: #6c757d; font-size: 14px; line-height: 1.6; }
 
 
 /* ================================================================== */
-/* =================== 核心：图表节点样式 ======================= */
+/* =================== 核心：图表及覆盖层样式 ======================= */
 /* ================================================================== */
-#chart_div_container { flex: 3; min-width: 60%; min-height: 800px; }
-#orgchart_div, #timeline_div { width: 100%; height: 800px; border: none; background-color: transparent; border-radius: 12px; }
+#chart_div_container {
+    flex: 3;
+    min-width: 60%;
+    min-height: 800px;
+    position: relative; /* [新增] 关键！让内部绝对定位的元素有参考物 */
+    overflow: hidden; /* 隐藏可能溢出的部分 */
+    border-radius: 12px; /* 给容器也加上圆角 */
+}
+#orgchart_div, #timeline_div { width: 100%; height: 100%; border: 1px solid #e9ecef; background-color: #ffffff; box-sizing: border-box; }
 
-/* 默认节点样式 */
-#orgchart_div .google-visualization-orgchart-node {
-    border: 1px solid #e5e0d4; /* 匹配米色的边框 */
-    border-radius: 10px;
-    background: #faf8f2; /* 最终使用的柔和米色 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 12px 16px !important;
-    transition: all 0.3s ease;
-    cursor: default;
-    min-width: 180px;
-    box-sizing: border-box;
+/* [新增] 覆盖在图表上方面板的通用样式 */
+.chart-overlay-panel {
+    position: absolute; /* 绝对定位 */
+    z-index: 10; /* 确保在图表之上 */
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.7); /* 半透明背景 */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    backdrop-filter: blur(5px); /* 毛玻璃效果 */
 }
 
-/* 鼠标悬停时节点的效果 (需要提升特异性) */
-#orgchart_div .google-visualization-orgchart-node:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: #007bff;
+/* [新增] 右上角定位 */
+.top-right {
+    top: 20px;
+    right: 20px;
 }
 
-/* 高亮节点样式 (同样需要提升特异性) */
-#orgchart_div .google-visualization-orgchart-node.highlight-node {
-    background: linear-gradient(135deg, #fff9e6, #ffeeba);
-    border-color: #ffd56b;
-    box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3);
+/* [新增] 右下角定位 */
+.bottom-right {
+    bottom: 20px;
+    right: 20px;
 }
 
-/* 节点内部文字排版 */
+
+/* --- 图表节点样式 --- */
+#orgchart_div .google-visualization-orgchart-node { border: 1px solid #e5e0d4; border-radius: 10px; background: #faf8f2; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 12px 16px !important; transition: all 0.3s ease; cursor: default; min-width: 180px; box-sizing: border-box; }
+#orgchart_div .google-visualization-orgchart-node:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); border-color: #007bff; }
+#orgchart_div .google-visualization-orgchart-node.highlight-node { background: linear-gradient(135deg, #fff9e6, #ffeeba); border-color: #ffd56b; box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3); }
 .node-name { font-size: 16px; font-weight: 600; color: #212529; text-decoration: none; padding: 4px 6px; border-radius: 4px; }
 .node-name:hover { background-color: rgba(0, 123, 255, 0.1); text-decoration: none; }
 .node-name.focal-person { color: #d9534f; font-size: 1.1em; }
 .node-name.spouse { color: #007bff; font-weight: 400; }
 .date-info { font-size: 13px; color: #6c757d; margin-top: 6px; }
-
-/* 连接线样式 */
-.google-visualization-orgchart-linebottom, .google-visualization-orgchart-lineleft, .google-visualization-orgchart-lineright {
-    border-color: #adb5bd;
-}
+.google-visualization-orgchart-linebottom, .google-visualization-orgchart-lineleft, .google-visualization-orgchart-lineright { border-color: #adb5bd; }
 
 /* ================================================================== */
 /* ========================= 弹窗和打印样式 ======================= */
@@ -213,27 +82,9 @@ label.action-btn {
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 1000; }
 .modal-content { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
 .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
-
-/* [美化] 弹窗内的按钮 */
-.modal-actions button {
-    flex-grow: 1;
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: 1px solid #ced4da;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-}
-#saveBtn {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
+.modal-actions button { flex-grow: 1; padding: 10px 15px; border-radius: 6px; border: 1px solid #ced4da; cursor: pointer; font-weight: 500; transition: all 0.2s ease-in-out; }
+#saveBtn { background-color: #007bff; color: white; border-color: #007bff; }
 #saveBtn:hover { background-color: #0056b3; }
-#cancelBtn {
-    background-color: #f8f9fa;
-    color: #495057;
-}
+#cancelBtn { background-color: #f8f9fa; color: #495057; }
 #cancelBtn:hover { background-color: #e9ecef; }
-
 @media print { body, .main-container { margin: 0; padding: 0; } .controls, h1 { display: none !important; } #chart_div_container { width: 100%; height: auto; border: none; box-shadow: none; } }
