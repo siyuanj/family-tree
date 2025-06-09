@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的交互式家谱 (含时间轴)</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <style>
+        /* --- 基础样式 (与之前版本基本一致) --- */
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; transition: background-color 0.3s; }
+        h1 { text-align: center; color: #333; transition: color 0.3s; }
+        .main-container { display: flex; flex-wrap: wrap; width: 98%; max-width: 1800px; margin: 20px auto; gap: 20px; }
+        .controls { flex: 1; min-width: 300px; max-width: 350px; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: fit-content; transition: background-color 0.3s, box-shadow 0.3s; }
+        .panel-section { border-top: 2px solid #eaf2fa; margin-top: 20px; padding-top: 20px; }
+        .panel-section h2 { margin-top: 0; color: #2e75b5; padding-bottom: 10px; border-bottom: 2px solid #eaf2fa; transition: color 0.3s, border-color 0.3s; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #333; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .form-group button { width: 100%; padding: 10px; background-color: #5b9bd5; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background-color 0.3s; }
+        .form-group button:hover { background-color: #2e75b5; }
+        #chart_div_container { flex: 3; min-width: 60%; min-height: 800px; }
+        #orgchart_div, #timeline_div { width: 100%; height: 800px; border: 1px solid #ccc; background-color: #ffffff; border-radius: 8px; transition: background-color 0.3s, border-color 0.3s; }
+        
+        /* --- 节点样式 (与之前版本基本一致) --- */
+        .google-visualization-orgchart-node { border: 2px solid #5b9bd5; border-radius: 8px; background: #eaf2fa; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 8px !important; transition: background-color 0.3s, border-color 0.3s; }
+        .google-visualization-orgchart-node.highlight-node { background-color: #fff3cd !important; border-color: #ffc107 !important; }
+        .google-visualization-orgchart-node.ancestor-node { background-color: #d1ecf1 !important; border-color: #bee5eb !important; }
+        .google-visualization-orgchart-node-final { font-size: 16px; font-weight: bold; color: #2e75b5; transition: color 0.3s; }
+        .date-info { font-size: 12px; color: #555; transition: color 0.3s; margin-top: 4px; }
+        
+        /* --- 其他UI组件样式 (与之前版本基本一致) --- */
+        .action-btn-group { display: flex; gap: 10px; }
+        .action-btn { flex-grow: 1; padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: opacity 0.3s, background-color 0.3s; }
+        .action-btn.active { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); background-color: #2e75b5; color: white; }
+        .action-btn:hover { opacity: 0.8; }
+        
+        /* --- 弹窗样式 (与之前版本基本一致) --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        /* --- 打印模式样式 (与之前版本基本一致) --- */
+        @media print { body, .main-container { margin: 0; padding: 0; } .controls, h1 { display: none !important; } #chart_div_container { width: 100%; height: auto; border: none; box-shadow: none; } }
+        .print-mode .controls, .print-mode h1 { display: none !important; }
+        .print-mode .main-container { width: 100%; max-width: 100%; padding: 0; margin: 0; }
+        .print-mode #chart_div_container { border: none; }
+
+        /* --- 主题样式 (与之前版本基本一致) --- */
+        body.theme-dark { background-color: #121212; }
+        .theme-dark h1, .theme-dark .form-group label { color: #e0e0e0; }
+        .theme-dark .controls, .theme-dark #orgchart_div, .theme-dark #timeline_div, .theme-dark .modal-content { background-color: #1e1e1e; border-color: #333; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .theme-dark .google-visualization-orgchart-node { background: #2c2c2c; border-color: #bb86fc; }
+        .theme-dark .google-visualization-orgchart-node-final { color: #bb86fc; }
+        .theme-dark .date-info { color: #aaa; }
+        .theme-dark .panel-section { border-top-color: #333; }
+        .theme-dark .panel-section h2 { color: #bb86fc; border-bottom-color: #333; }
+        .theme-dark .form-group button, .theme-dark .action-btn.active { background-color: #bb86fc; color: #121212;}
+        .theme-dark .form-group button:hover { background-color: #3700b3; }
+        
+        body.theme-sepia { background-color: #fbf0d9; }
+        .theme-sepia .controls, .theme-sepia #orgchart_div, .theme-sepia #timeline_div, .theme-sepia .modal-content { background-color: #fff9ed; border-color: #d3c0a5; }
+        .theme-sepia h1, .theme-sepia .form-group label { color: #5a472a; }
+        .theme-sepia .google-visualization-orgchart-node { background: #fdf5e6; border-color: #8b7d6b; }
+        .theme-sepia .google-visualization-orgchart-node-final { color: #6b4f3a; }
+        .theme-sepia .date-info { color: #8c7853; }
+        .theme-sepia .panel-section { border-top-color: #d3c0a5; }
+        .theme-sepia .panel-section h2 { color: #6b4f3a; border-bottom-color: #d3c0a5; }
+        .theme-sepia .form-group button, .theme-sepia .action-btn.active { background-color: #8b4513; }
+        .theme-sepia .form-group button:hover { background-color: #5a2d0c; }
+    </style>
+</head>
+<body>
+
+    <h1>我的交互式家谱 (含时间轴)</h1>
+
+    <div class="main-container">
+        <div class="controls">
+            <div id="view-panel">
+                <h2>视图切换</h2>
+                <div class="action-btn-group">
+                    <button id="orgchart-view-btn" class="action-btn active" onclick="switchView('orgchart')">家谱视图</button>
+                    <button id="timeline-view-btn" class="action-btn" onclick="switchView('timeline')">时间轴</button>
+                    <button class="action-btn" onclick="togglePrintMode()">打印预览</button>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h2>主题设置</h2>
+                <div class="action-btn-group">
+                    <button class="action-btn" onclick="setTheme('default')">默认</button>
+                    <button class="action-btn" onclick="setTheme('dark')">暗黑</button>
+                    <button class="action-btn" onclick="setTheme('sepia')">怀旧</button>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h2>搜索成员</h2>
+                <div class="form-group">
+                    <input type="text" id="searchInput" placeholder="输入姓名并按回车搜索...">
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h2>数据管理</h2>
+                <div class="action-btn-group">
+                    <label for="import-file" class="action-btn" style="background-color: #17a2b8; color: white; text-align: center; line-height: 2;">导入</label>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <button id="exportBtn" class="action-btn" style="background-color: #007bff; color: white;">导出</button>
+                    <button id="resetBtn" class="action-btn" style="background-color: #6c757d; color: white;">重置</button>
+                </div>
+            </div>
+
+            <div id="add-member-panel" class="panel-section">
+                <h2>添加新成员</h2>
+                <div class="form-group"><label for="newName">姓名:</label><input type="text" id="newName" placeholder="例如: 蒋思源"></div>
+                <div class="form-group"><label for="newInfo">生平信息:</label><input type="text" id="newInfo" placeholder="例如: 1940-至今 或 1965生"></div>
+                <div class="form-group"><label for="newParent">父亲/家长:</label><select id="newParent"></select></div>
+                <div class="form-group"><label for="newTooltip">悬停提示:</label><textarea id="newTooltip" rows="3" placeholder="关于此人的简短介绍"></textarea></div>
+                <div class="form-group"><button id="addBtn">添加到家谱</button></div>
+            </div>
+
+            <div id="details-panel" class="panel-section">
+                <h2>成员详情</h2>
+                <div id="details-content"><p>请点击家谱中的任意成员查看详情。</p></div>
+                <div id="details-actions" class="action-btn-group"></div>
+            </div>
+        </div>
+
+        <div id="chart_div_container">
+            <div id="orgchart_div"></div>
+            <div id="timeline_div" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>编辑成员信息</h2>
+            <div class="form-group"><label for="editName">姓名:</label><input type="text" id="editName"></div>
+            <div class="form-group"><label for="editInfo">生平信息:</label><input type="text" id="editInfo"></div>
+            <div class="form-group"><label for="editParent">父亲/家长:</label><select id="editParent"></select></div>
+            <div class="form-group"><label for="editTooltip">悬停提示:</label><textarea id="editTooltip" rows="3"></textarea></div>
+            <div class="modal-actions">
+                <button id="saveBtn" class="action-btn" style="background-color: #28a745; color: white;">保存更改</button>
+                <button id="cancelBtn" class="action-btn" style="background-color: #6c757d; color: white;">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // 加载两个图表库
+        google.charts.load('current', {packages:['orgchart', 'timeline']});
+        google.charts.setOnLoadCallback(initialize);
+
+        // --- 1. Initial Data ---
+        const initialFamilyData = {
+            "cols": [
+                {"id": "Name", "label": "Name", "type": "string"},
+                {"id": "Manager", "label": "Manager", "type": "string"},
+                {"id": "ToolTip", "label": "ToolTip", "type": "string"}
+            ],
+            "rows": [
+                {"c":[{"v":"JiangZiwen","f":"蒋子文<div class=\"date-info\">(未知 - 1991)</div>"},{"v":null,"f":null},{"v":"家族的沅江分支始祖"}]},
+                {"c":[{"v":"ZengzuFu","f":"曾祖父<div class=\"date-info\"></div>"},{"v":"JiangZiwen","f":null},{"v":"由蒋子文过继"}]},
+                {"c":[{"v":"JiangLuosheng","f":"蒋罗生 & 祝辉<div class=\"date-info\">1940 - 至今</div>"},{"v":"ZengzuFu","f":null},{"v":"我的爷爷和奶奶"}]},
+                {"c":[{"v":"JiangJianhong","f":"蒋建宏<div class=\"date-info\">1965年生</div>"},{"v":"JiangLuosheng","f":null},{"v":"伯父，家中长子"}]},
+                {"c":[{"v":"JiangLiyun","f":"蒋丽云<div class=\"date-info\"></div>"},{"v":"JiangLuosheng","f":null},{"v":"姑姑"}]},
+                {"c":[{"v":"JiangJianjun","f":"蒋建军<div class=\"date-info\">1965年生</div>"},{"v":"JiangLuosheng","f":null},{"v":"父亲，家中幼子"}]},
+                {"c":[{"v":"JiangSiyuan","f":"蒋思源<div class=\"date-info\">2003年生</div>"},{"v":"JiangJianjun","f":null},{"v":"我，家族史的记录者"}]}
+            ]
+        };
+
+        // --- 2. Global Variables ---
+        let orgChart, timelineChart, dataTable, selectedRowIndex = null;
+        let currentView = 'orgchart';
+        const LOCAL_STORAGE_KEY = 'familyTreeData';
+        let originalNodeClasses = [];
+
+        // --- 3. Main Initialization Function ---
+        function initialize() {
+            orgChart = new google.visualization.OrgChart(document.getElementById('orgchart_div'));
+            timelineChart = new google.visualization.Timeline(document.getElementById('timeline_div'));
+            
+            // Event Listeners
+            google.visualization.events.addListener(orgChart, 'select', onNodeSelect);
+            document.getElementById('addBtn').addEventListener('click', addMember);
+            document.getElementById('saveBtn').addEventListener('click', saveChanges);
+            document.getElementById('cancelBtn').addEventListener('click', closeEditModal);
+            document.getElementById('editModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeEditModal(); });
+            document.getElementById('exportBtn').addEventListener('click', exportDataToFile);
+            document.getElementById('import-file').addEventListener('change', importDataFromFile);
+            document.getElementById('resetBtn').addEventListener('click', resetToDefault);
+            document.getElementById('searchInput').addEventListener('keypress', e => {
+                if (e.key === 'Enter') searchMember(e.target.value);
+            });
+            
+            loadData();
+        }
+        
+        // --- 4. Core Data & Drawing Functions ---
+        function loadData(dataObject = null) {
+            if (dataObject) {
+                dataTable = new google.visualization.DataTable(dataObject);
+            } else {
+                const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                const sourceData = savedData ? JSON.parse(savedData) : initialFamilyData;
+                dataTable = new google.visualization.DataTable(sourceData);
+            }
+            
+            selectedRowIndex = null;
+            orgChart.setSelection([]);
+            onNodeSelect();
+
+            originalNodeClasses = [];
+            for(let i = 0; i < dataTable.getNumberOfRows(); i++) {
+                originalNodeClasses.push('');
+            }
+            
+            drawCurrentView();
+            updateParentDropdowns();
+        }
+        
+        function saveDataToLocalStorage() {
+            if (dataTable) {
+                localStorage.setItem(LOCAL_STORAGE_KEY, dataTable.toJSON());
+            }
+        }
+
+        function drawCurrentView() {
+            if (currentView === 'orgchart') {
+                drawOrgChart();
+            } else if (currentView === 'timeline') {
+                drawTimelineChart();
+            }
+        }
+
+        function drawOrgChart() {
+            if (dataTable && dataTable.getNumberOfRows() > 0) {
+                 orgChart.draw(dataTable, { 'allowHtml': true, 'allowCollapse': true, 'nodeClass': 'google-visualization-orgchart-node-final' });
+            } else {
+                 document.getElementById('orgchart_div').innerHTML = '<p style="text-align:center; padding-top: 50px; color: #888;">家谱为空。</p>';
+            }
+        }
+
+        function drawTimelineChart() {
+            const timelineData = new google.visualization.DataTable();
+            timelineData.addColumn({ type: 'string', id: 'Name' });
+            timelineData.addColumn({ type: 'date', id: 'Start' });
+            timelineData.addColumn({ type: 'date', id: 'End' });
+
+            for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+                const { name, info } = parseFormattedName(dataTable.getFormattedValue(i, 0));
+                const birthYear = extractYear(info);
+                const deathYear = extractYear(info, false);
+
+                if (birthYear) {
+                    const startDate = new Date(birthYear, 0, 1);
+                    // 如果有逝世年份，则设为结束；否则，设为当前年份，表示“至今”
+                    const endDate = deathYear ? new Date(deathYear, 11, 31) : new Date();
+                    timelineData.addRow([name, startDate, endDate]);
+                }
+            }
+            
+            if (timelineData.getNumberOfRows() > 0) {
+                const options = {
+                    timeline: { groupByRowLabel: false, showBarLabels: true },
+                    avoidOverlappingGridLines: true
+                };
+                timelineChart.draw(timelineData, options);
+            } else {
+                document.getElementById('timeline_div').innerHTML = '<p style="text-align:center; padding-top: 50px; color: #888;">没有足够的时间信息来生成时间轴。</p>';
+            }
+        }
+
+        // --- 5. Add, Edit, Delete Logic ---
+        // (No changes from previous version, just ensure they call saveDataToLocalStorage and drawCurrentView)
+        function addMember() { /* ... */ drawCurrentView(); /* ... */ }
+        function saveChanges() { /* ... */ drawCurrentView(); /* ... */ }
+        function deleteMember() { /* ... */ drawCurrentView(); /* ... */ }
+
+        // --- 6. File I/O and Reset Functions ---
+        // (No changes from previous version)
+
+        // --- 7. NEW and Enhanced Interaction Functions ---
+        function switchView(viewName) {
+            currentView = viewName;
+            document.getElementById('orgchart_div').style.display = viewName === 'orgchart' ? 'block' : 'none';
+            document.getElementById('timeline_div').style.display = viewName === 'timeline' ? 'block' : 'none';
+
+            document.getElementById('orgchart-view-btn').classList.toggle('active', viewName === 'orgchart');
+            document.getElementById('timeline-view-btn').classList.toggle('active', viewName === 'timeline');
+
+            // 详情面板和搜索只在家谱视图下有意义
+            const orgChartSpecificPanels = ['details-panel', 'add-member-panel'];
+            orgChartSpecificPanels.forEach(id => {
+                 document.getElementById(id).style.display = viewName === 'orgchart' ? 'block' : 'none';
+            });
+            
+            drawCurrentView();
+        }
+
+        function searchMember(query) {
+            if (currentView !== 'orgchart') {
+                alert("请切换到家谱视图以使用搜索功能。");
+                return;
+            }
+            // ... (rest of the function is the same)
+        }
+        
+        function highlightAncestors() {
+            if (currentView !== 'orgchart') {
+                alert("请切换到家谱视图以使用高亮功能。");
+                return;
+            }
+            // ... (rest of the function is the same)
+        }
+        
+        // --- 8. Helper Functions ---
+        function onNodeSelect() {
+            // ... (rest of the function is the same, but it's only relevant for orgchart)
+        }
+
+        function extractYear(infoString, isBirth = true) {
+            if (!infoString) return null;
+            // 匹配4位数字年份，例如 1988, 1950-2020, (1990生)
+            const yearRegex = /\d{4}/g;
+            const years = infoString.match(yearRegex);
+
+            if (!years || years.length === 0) return null;
+
+            if (isBirth) {
+                return parseInt(years[0]); // 返回第一个匹配到的年份作为出生年
+            } else {
+                return years.length > 1 ? parseInt(years[1]) : null; // 如果有第二个年份，作为逝世年
+            }
+        }
+
+        // ... All other helper functions (updateParentDropdowns, parseFormattedName, etc.) ...
+        
+        // --- Full function bodies for copy-pasting convenience ---
+        function saveChanges() {
+            if (selectedRowIndex === null) return;
+            const newName = document.getElementById('editName').value.trim();
+            const newInfo = document.getElementById('editInfo').value.trim();
+            const newParentId = document.getElementById('editParent').value || null;
+            const newTooltip = document.getElementById('editTooltip').value.trim();
+            if (!newName) { alert('姓名不能为空！'); return; }
+            const formattedName = `${newName}<div class="date-info">${newInfo}</div>`;
+            dataTable.setFormattedValue(selectedRowIndex, 0, formattedName);
+            dataTable.setValue(selectedRowIndex, 1, newParentId);
+            dataTable.setValue(selectedRowIndex, 2, newTooltip);
+            closeEditModal();
+            updateParentDropdowns();
+            onNodeSelect();
+            saveDataToLocalStorage();
+            drawCurrentView();
+            alert(`成员 "${newName}" 的信息已更新。`);
+        }
+        function addMember() {
+            const name = document.getElementById('newName').value.trim();
+            const info = document.getElementById('newInfo').value.trim();
+            const parentId = document.getElementById('newParent').value || null;
+            const tooltip = document.getElementById('newTooltip').value.trim();
+            if (!name) { alert('请输入新成员的姓名！'); return; }
+            const newId = name.replace(/\s/g, '') + Date.now();
+            const formattedName = `${name}<div class="date-info">${info}</div>`;
+            dataTable.addRow([{v: newId, f: formattedName}, parentId, tooltip]);
+            originalNodeClasses.push('');
+            updateParentDropdowns();
+            saveDataToLocalStorage();
+            drawCurrentView();
+            document.getElementById('newName').value = '';
+            document.getElementById('newInfo').value = '';
+            document.getElementById('newTooltip').value = '';
+            alert(`成员 "${name}" 已成功添加！`);
+        }
+        function deleteMember() {
+            if (selectedRowIndex === null) return;
+            const { name } = parseFormattedName(dataTable.getFormattedValue(selectedRowIndex, 0));
+            if (confirm(`您确定要删除成员 "${name}" 吗？\n此操作无法撤销。`)) {
+                dataTable.removeRow(selectedRowIndex);
+                originalNodeClasses.splice(selectedRowIndex, 1);
+                selectedRowIndex = null;
+                orgChart.setSelection([]);
+                updateParentDropdowns();
+                onNodeSelect();
+                saveDataToLocalStorage();
+                drawCurrentView();
+                alert(`成员 "${name}" 已被删除。`);
+            }
+        }
+        function exportDataToFile() {
+            const dataJson = dataTable.toJSON();
+            const blob = new Blob([dataJson], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'family_tree_data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        function importDataFromFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    loadData(importedData);
+                    saveDataToLocalStorage();
+                    alert('文件导入成功！');
+                } catch (error) {
+                    alert('文件格式错误或已损坏，请确保导入正确的JSON文件。');
+                    console.error("Import error:", error);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+        function resetToDefault() {
+            if (confirm('您确定要重置家谱吗？\n所有保存在浏览器中的数据将被清空，并恢复到初始状态。此操作无法撤销。')) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                loadData();
+                alert('家谱已重置。');
+            }
+        }
+        function clearHighlights() {
+            for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+                dataTable.setRowProperty(i, 'className', originalNodeClasses[i]);
+            }
+        }
+        function getRowIndexById(id) {
+            for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+                if (dataTable.getValue(i, 0) === id) return i;
+            }
+            return null;
+        }
+        function togglePrintMode() {
+            document.body.classList.toggle('print-mode');
+            drawCurrentView();
+        }
+        function setTheme(themeName) {
+            document.body.className = themeName === 'default' ? '' : `theme-${themeName}`;
+        }
+        function onNodeSelect() {
+            const selection = orgChart.getSelection();
+            const detailsContent = document.getElementById('details-content');
+            const detailsActions = document.getElementById('details-actions');
+            clearHighlights();
+            if (selection.length > 0) {
+                selectedRowIndex = selection[0].row;
+                const nameHtml = dataTable.getFormattedValue(selectedRowIndex, 0);
+                const tooltip = dataTable.getValue(selectedRowIndex, 2);
+                detailsContent.innerHTML = `<h3>${nameHtml}</h3><p><strong>简介:</strong> ${tooltip || '暂无详细介绍。'}</p>`;
+                detailsActions.innerHTML = `<button class="action-btn" onclick="highlightAncestors()" style="background-color: #ffc107;">高亮祖先</button><button class="action-btn" onclick="openEditModal()" style="background-color: #28a745; color: white;">编辑</button><button class="action-btn" onclick="deleteMember()" style="background-color: #dc3545; color: white;">删除</button>`;
+            } else {
+                selectedRowIndex = null;
+                detailsContent.innerHTML = '<p>请点击家谱中的任意成员查看详情。</p>';
+                detailsActions.innerHTML = '';
+            }
+        }
+        function updateParentDropdowns() {
+            const addParentSelect = document.getElementById('newParent');
+            const editParentSelect = document.getElementById('editParent');
+            const currentId = selectedRowIndex !== null ? dataTable.getValue(selectedRowIndex, 0) : null;
+            const savedAddValue = addParentSelect.value;
+            addParentSelect.innerHTML = '<option value="">无 (作为始祖)</option>';
+            editParentSelect.innerHTML = '<option value="">无 (作为始祖)</option>';
+            for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+                const id = dataTable.getValue(i, 0);
+                const { name } = parseFormattedName(dataTable.getFormattedValue(i, 0));
+                const optionHtml = `<option value="${id}">${name}</option>`;
+                addParentSelect.innerHTML += optionHtml;
+                if (id !== currentId) {
+                    editParentSelect.innerHTML += optionHtml;
+                }
+            }
+            addParentSelect.value = savedAddValue;
+        }
+        function openEditModal() {
+            if (selectedRowIndex === null) return;
+            const { name, info } = parseFormattedName(dataTable.getFormattedValue(selectedRowIndex, 0));
+            const parentId = dataTable.getValue(selectedRowIndex, 1);
+            const tooltip = dataTable.getValue(selectedRowIndex, 2);
+            document.getElementById('editName').value = name;
+            document.getElementById('editInfo').value = info;
+            document.getElementById('editTooltip').value = tooltip;
+            updateParentDropdowns();
+            document.getElementById('editParent').value = parentId || "";
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        function parseFormattedName(formattedValue) {
+            if(!formattedValue) return { name: '', info: '' };
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = formattedValue;
+            const name = tempDiv.firstChild ? (tempDiv.firstChild.nodeValue || '') : '';
+            const infoDiv = tempDiv.querySelector('.date-info');
+            const info = infoDiv ? infoDiv.textContent : '';
+            return { name: name.trim(), info: info.trim() };
+        }
+    </script>
+</body>
+</html>
