@@ -1,1 +1,112 @@
-{"cols":[{"id":"Name","label":"Name","type":"string"},{"id":"Manager","label":"Manager","type":"string"},{"id":"ToolTip","label":"ToolTip","type":"string"}],"rows":[{"c":[{"v":"JiangZiwen","f":"蒋子文<div class=\"date-info\">(1900 - 1991)</div>"},{"v":null,"f":null},{"v":"家族的沅江分支始祖"}],"p":{"className":""}},{"c":[{"v":"ZengzuFu","f":"曾祖父<div class=\"date-info\">(由蒋子文过继)</div>"},{"v":"JiangZiwen","f":null},{"v":"名字未知"}],"p":{"className":""}},{"c":[{"v":"JiangLuosheng","f":"蒋罗生 & 祝辉<div class=\"date-info\">爷爷：1940-至今</div>"},{"v":"ZengzuFu","f":null},{"v":"我的爷爷和奶奶\n爷爷：1940-至今 奶奶：1942-2023"}],"p":{"className":""}},{"c":[{"v":"JiangJianhong","f":"蒋建宏<div class=\"date-info\">(1965-至今)</div>"},{"v":"JiangLuosheng","f":null},{"v":"伯父，家中长子"}],"p":{"className":""}},{"c":[{"v":"JiangLiyun","f":"蒋丽云<div class=\"date-info\"></div>"},{"v":"JiangLuosheng","f":null},{"v":"姑姑"}],"p":{"className":""}},{"c":[{"v":"JiangJianjun","f":"蒋建军<div class=\"date-info\">1969年出生</div>"},{"v":"JiangLuosheng","f":null},{"v":"父亲，家中幼子"}],"p":{"className":""}},{"c":[{"v":"JiangSiyuan","f":"蒋思源<div class=\"date-info\">2005出生</div>"},{"v":"JiangJianjun","f":null},{"v":"现就读于清华大学，家族史的记录者"}],"p":{"className":""}},{"c":[{"v":"陈哲1749354044021","f":"陈哲<div class=\"date-info\"></div>"},{"v":"JiangLiyun"},{"v":"天津财经大学硕士"}],"p":{"className":""}},{"c":[{"v":"蒋家珊1749354066221","f":"蒋家珊<div class=\"date-info\">1999至今</div>"},{"v":"JiangJianhong"},{"v":"香港理工大学硕士"}],"p":{"className":""}},{"c":[{"v":"11749460519717","f":"1<div class=\"date-info\"></div>"},{"v":null},{"v":""}],"p":{"className":""}},{"c":[{"v":"21749460536027","f":"2<div class=\"date-info\"></div>"},{"v":"11749460519717"},{"v":""}],"p":{"className":""}},{"c":[{"v":"31749460541779","f":"3<div class=\"date-info\"></div>"},{"v":"21749460536027"},{"v":""}],"p":{"className":""}},{"c":[{"v":"41749460546406","f":"4<div class=\"date-info\"></div>"},{"v":"31749460541779"},{"v":""}],"p":{"className":""}},{"c":[{"v":"51749460555191","f":"5<div class=\"date-info\"></div>"},{"v":"31749460541779"},{"v":""}],"p":{"className":""}},{"c":[{"v":"61749460578792","f":"6<div class=\"date-info\"></div>"},{"v":"51749460555191"},{"v":""}],"p":{"className":""}},{"c":[{"v":"71749460588587","f":"7<div class=\"date-info\"></div>"},{"v":"61749460578792"},{"v":""}],"p":{"className":""}}]}
+[
+  {
+    "id": "JiangZiwen",
+    "name": "蒋子文",
+    "gender": "male",
+    "info": "未知 - 1991",
+    "spouseId": null,
+    "fatherId": null,
+    "motherId": null,
+    "tooltip": "家族的沅江分支始祖"
+  },
+  {
+    "id": "ZengzuFu",
+    "name": "曾祖父",
+    "gender": "male",
+    "info": "",
+    "spouseId": "ZengzuMu",
+    "fatherId": "JiangZiwen",
+    "motherId": null,
+    "tooltip": "由蒋子文过继"
+  },
+  {
+    "id": "ZengzuMu",
+    "name": "曾祖母",
+    "gender": "female",
+    "info": "",
+    "spouseId": "ZengzuFu",
+    "fatherId": null,
+    "motherId": null,
+    "tooltip": "曾祖父的妻子"
+  },
+  {
+    "id": "JiangLuosheng",
+    "name": "蒋罗生",
+    "gender": "male",
+    "info": "1940 - 至今",
+    "spouseId": "ZhuHui",
+    "fatherId": "ZengzuFu",
+    "motherId": "ZengzuMu",
+    "tooltip": "我的爷爷"
+  },
+  {
+    "id": "ZhuHui",
+    "name": "祝辉",
+    "gender": "female",
+    "info": "",
+    "spouseId": "JiangLuosheng",
+    "fatherId": null,
+    "motherId": null,
+    "tooltip": "我的奶奶"
+  },
+  {
+    "id": "JiangJianhong",
+    "name": "蒋建宏",
+    "gender": "male",
+    "info": "1965年生",
+    "spouseId": null,
+    "fatherId": "JiangLuosheng",
+    "motherId": "ZhuHui",
+    "tooltip": "伯父"
+  },
+  {
+    "id": "JiangLiyun",
+    "name": "蒋丽云",
+    "gender": "female",
+    "info": "",
+    "spouseId": null,
+    "fatherId": "JiangLuosheng",
+    "motherId": "ZhuHui",
+    "tooltip": "姑姑"
+  },
+  {
+    "id": "JiangJianjun",
+    "name": "蒋建军",
+    "gender": "male",
+    "info": "1965年生",
+    "spouseId": "LiuFang",
+    "fatherId": "JiangLuosheng",
+    "motherId": "ZhuHui",
+    "tooltip": "我的父亲"
+  },
+  {
+    "id": "LiuFang",
+    "name": "单蕾",
+    "gender": "female",
+    "info": "1975年生",
+    "spouseId": "JiangJianjun",
+    "fatherId": "单品1749465466129",
+    "motherId": null,
+    "tooltip": "我的母亲"
+  },
+  {
+    "id": "JiangSiyuan",
+    "name": "蒋思源",
+    "gender": "male",
+    "info": "2005年生",
+    "spouseId": null,
+    "fatherId": "JiangJianjun",
+    "motherId": "LiuFang",
+    "tooltip": "测试信息"
+  },
+  {
+    "id": "单品1749465466129",
+    "name": "单品",
+    "gender": "male",
+    "info": "",
+    "fatherId": null,
+    "motherId": null,
+    "spouseId": null,
+    "tooltip": ""
+  }
+]

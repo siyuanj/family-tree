@@ -60,7 +60,7 @@ function drawOrgChart() {
         return;
     }
     const dataTable = buildDataTableForFocalPerson(focalPersonId);
-    orgChart.draw(dataTable, { allowHtml: true, allowCollapse: true, nodeClass: 'google-visualization-orgchart-node' });
+    orgChart.draw(dataTable, { allowHtml: true, allowCollapse: true });
 }
 
 function buildDataTableForFocalPerson(personId) {
@@ -82,11 +82,16 @@ function buildDataTableForFocalPerson(personId) {
         dataTable.addRow([{ v: person.id, f: nodeContent.html }, managerId, person.tooltip]);
     });
     
+    // 用下面这段替换原来的 for 循环
     for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
         const rowId = dataTable.getValue(i, 0);
+        let className = 'google-visualization-orgchart-node'; // 先给所有节点设置基础类名
+        
         if(rowId === focalPersonId){
-            dataTable.setRowProperty(i, 'className', 'highlight-node');
+            className += ' highlight-node'; // 如果是焦点人物，再追加高亮类名
         }
+        
+        dataTable.setRowProperty(i, 'className', className); // 设置最终的类名
     }
     return dataTable;
 }
