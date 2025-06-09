@@ -20,7 +20,7 @@ h1 { text-align: center; color: #343a40; font-weight: 300; letter-spacing: 1px; 
 .form-group button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 500; transition: background-color 0.2s; margin-top: 10px; }
 .form-group button:hover { background-color: #0056b3; }
 .action-btn-group { display: flex; gap: 10px; }
-.action-btn { flex-grow: 1; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; background-color: rgba(248, 249, 250, 0.9); /* 半透明背景 */ color: #495057; text-align: center; transition: all 0.2s ease-in-out; backdrop-filter: blur(4px); /* 毛玻璃效果 */ }
+.action-btn { flex-grow: 1; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; background-color: rgba(248, 249, 250, 0.9); color: #495057; text-align: center; transition: all 0.2s ease-in-out; backdrop-filter: blur(4px); }
 .action-btn:hover { background-color: #e9ecef; border-color: #adb5bd; }
 .action-btn.active { box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); background-color: #007bff; color: white; border-color: #007bff; }
 label.action-btn { line-height: 1.5; }
@@ -29,52 +29,121 @@ label.action-btn { line-height: 1.5; }
 
 
 /* ================================================================== */
-/* =================== 核心：图表及覆盖层样式 ======================= */
+/* =================== 核心：图表及覆盖层样式 (已修正) ================ */
 /* ================================================================== */
 #chart_div_container {
     flex: 3;
     min-width: 60%;
-    min-height: 800px;
-    position: relative; /* [新增] 关键！让内部绝对定位的元素有参考物 */
-    overflow: hidden; /* 隐藏可能溢出的部分 */
-    border-radius: 12px; /* 给容器也加上圆角 */
+    position: relative; /* 关键！作为按钮组的定位参考 */
 }
-#orgchart_div, #timeline_div { width: 100%; height: 100%; border: 1px solid #e9ecef; background-color: #ffffff; box-sizing: border-box; }
 
-/* [新增] 覆盖在图表上方面板的通用样式 */
+/* [修正] 包裹图表的容器，它将撑开高度 */
+.chart-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* 占满父容器 */
+    min-height: 800px; /* 保证最小高度 */
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* [修正] 图表 div 现在继承父容器的高度 */
+#orgchart_div, #timeline_div {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #e9ecef;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+/* 覆盖层按钮组的样式 (保持不变) */
 .chart-overlay-panel {
-    position: absolute; /* 绝对定位 */
-    z-index: 10; /* 确保在图表之上 */
+    position: absolute;
+    z-index: 10;
     padding: 12px;
-    background-color: rgba(255, 255, 255, 0.7); /* 半透明背景 */
+    background-color: rgba(255, 255, 255, 0.7);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    backdrop-filter: blur(5px); /* 毛玻璃效果 */
+    backdrop-filter: blur(5px);
+}
+.top-right { top: -65px; right: 15px; }
+.bottom-right { bottom: 20px; right: 20px; }
+
+
+/* ================================================================== */
+/* ========================= 图表节点样式 ========================= */
+/* ================================================================== */
+
+/* 节点基础样式 */
+#orgchart_div .google-visualization-orgchart-node { 
+    border: 1px solid #e5e0d4; 
+    border-radius: 10px; 
+    background: #faf8f2; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+    padding: 12px 16px !important; 
+    transition: all 0.3s ease; 
+    cursor: default; 
+    min-width: 180px; 
+    box-sizing: border-box; 
 }
 
-/* [新增] 右上角定位 */
-.top-right {
-    top: 20px;
-    right: 20px;
+/* 节点悬停效果 */
+#orgchart_div .google-visualization-orgchart-node:hover { 
+    transform: translateY(-4px) scale(1.03); 
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); 
+    border-color: #007bff; 
 }
 
-/* [新增] 右下角定位 */
-.bottom-right {
-    bottom: 20px;
-    right: 20px;
+/* 高亮节点样式 */
+#orgchart_div .google-visualization-orgchart-node.highlight-node { 
+    background: linear-gradient(135deg, #fff9e6, #ffeeba); 
+    border-color: #ffd56b; 
+    box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3); 
 }
 
+/* 节点名称样式 */
+.node-name { 
+    font-size: 16px; 
+    font-weight: 600; 
+    color: #212529; 
+    text-decoration: none; 
+    padding: 4px 6px; 
+    border-radius: 4px; 
+}
 
-/* --- 图表节点样式 --- */
-#orgchart_div .google-visualization-orgchart-node { border: 1px solid #e5e0d4; border-radius: 10px; background: #faf8f2; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 12px 16px !important; transition: all 0.3s ease; cursor: default; min-width: 180px; box-sizing: border-box; }
-#orgchart_div .google-visualization-orgchart-node:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); border-color: #007bff; }
-#orgchart_div .google-visualization-orgchart-node.highlight-node { background: linear-gradient(135deg, #fff9e6, #ffeeba); border-color: #ffd56b; box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3); }
-.node-name { font-size: 16px; font-weight: 600; color: #212529; text-decoration: none; padding: 4px 6px; border-radius: 4px; }
-.node-name:hover { background-color: rgba(0, 123, 255, 0.1); text-decoration: none; }
-.node-name.focal-person { color: #d9534f; font-size: 1.1em; }
-.node-name.spouse { color: #007bff; font-weight: 400; }
-.date-info { font-size: 13px; color: #6c757d; margin-top: 6px; }
-.google-visualization-orgchart-linebottom, .google-visualization-orgchart-lineleft, .google-visualization-orgchart-lineright { border-color: #adb5bd; }
+/* 节点名称悬停效果 */
+.node-name:hover { 
+    background-color: rgba(0, 123, 255, 0.1); 
+    text-decoration: none; 
+}
+
+/* 焦点人物样式 */
+.node-name.focal-person { 
+    color: #d9534f; 
+    font-size: 1.1em; 
+}
+
+/* 配偶样式 */
+.node-name.spouse { 
+    color: #007bff; 
+    font-weight: 400; 
+}
+
+/* 日期信息样式 */
+.date-info { 
+    font-size: 13px; 
+    color: #6c757d; 
+    margin-top: 6px; 
+}
+
+/* 连接线样式 */
+.google-visualization-orgchart-linebottom, 
+.google-visualization-orgchart-lineleft, 
+.google-visualization-orgchart-lineright { 
+    border-color: #adb5bd; 
+}
 
 /* ================================================================== */
 /* ========================= 弹窗和打印样式 ======================= */

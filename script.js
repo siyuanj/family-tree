@@ -24,14 +24,19 @@ function initialize() {
     document.getElementById('import-file').addEventListener('change', importDataFromFile);
     document.getElementById('resetBtn').addEventListener('click', resetToDefault);
     
-    loadData();
+    // [关键修改] 使用 setTimeout 确保在 DOM 完全渲染和计算后才加载数据和绘图
+    setTimeout(loadData, 100); // 延迟100毫秒，这个时间足够了
 }
 
 // --- 数据与绘图核心 ---
 function loadData(dataArray = null) {
+    console.log("Loading data..."); // 添加日志
     const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     // 注意：initialFamilyData 来自 data.js 文件
     familyData = dataArray || (savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(initialFamilyData)));
+    
+    console.log("Family data loaded:", familyData); // 添加日志，看看数据对不对
+
     if (!familyData.find(p => p.id === focalPersonId)) {
         focalPersonId = familyData.length > 0 ? familyData[0].id : null;
     }

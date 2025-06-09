@@ -39,11 +39,13 @@
 
         <!-- [修改] 右侧图表容器，将按钮组移入其中 -->
         <div id="chart_div_container">
-            <!-- 1. 图表本身 -->
-            <div id="orgchart_div"></div>
-            <div id="timeline_div" style="display: none;"></div>
+            <!-- 1. 新增一个包裹层，专门用于定位 -->
+            <div class="chart-wrapper">
+                <div id="orgchart_div"></div>
+                <div id="timeline_div" style="display: none;"></div>
+            </div>
             
-            <!-- 2. 数据管理按钮组（放到右上角） -->
+            <!-- 2. 数据管理按钮组（现在是 chart-wrapper 的兄弟） -->
             <div id="data-management-panel" class="chart-overlay-panel top-right">
                 <div class="action-btn-group">
                     <label for="import-file" class="action-btn">导入</label>
@@ -53,7 +55,7 @@
                 </div>
             </div>
 
-            <!-- 3. 视图切换按钮组（放到右下角） -->
+            <!-- 3. 视图切换按钮组（现在是 chart-wrapper 的兄弟） -->
             <div id="view-switch-panel" class="chart-overlay-panel bottom-right">
                 <div class="action-btn-group">
                     <button id="orgchart-view-btn" class="action-btn active" onclick="switchView('orgchart')">家谱</button>
@@ -64,9 +66,20 @@
         </div>
     </div>
     
-    <!-- 编辑弹窗 (保持不变) -->
+    <!-- 编辑弹窗 (补充完整内容) -->
     <div id="editModal" class="modal-overlay">
-        <!-- ... 弹窗内部内容 ... -->
+        <div class="modal-content">
+            <h2>编辑成员信息</h2>
+            <input type="hidden" id="editId">
+            <div class="form-group"><label for="editName">姓名:</label><input type="text" id="editName"></div>
+            <div class="form-group"><label for="editGender">性别:</label><select id="editGender"><option value="male">男</option><option value="female">女</option></select></div>
+            <div class="form-group"><label for="editInfo">生平信息:</label><input type="text" id="editInfo"></div>
+            <div class="form-group"><label for="editFather">父亲:</label><select id="editFather"></select></div>
+            <div class="form-group"><label for="editMother">母亲:</label><select id="editMother"></select></div>
+            <div class="form-group"><label for="editSpouse">配偶:</label><select id="editSpouse"></select></div>
+            <div class="form-group"><label for="editTooltip">悬停提示:</label><textarea id="editTooltip" rows="3"></textarea></div>
+            <div class="modal-actions"><button id="saveBtn">保存</button><button id="cancelBtn">取消</button></div>
+        </div>
     </div>
 
     <!-- 脚本加载 (保持不变) -->

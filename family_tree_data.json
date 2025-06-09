@@ -3,7 +3,7 @@
     "id": "JiangZiwen",
     "name": "蒋子文",
     "gender": "male",
-    "info": "未知 - 1991",
+    "info": "1900 - 1991",
     "spouseId": null,
     "fatherId": null,
     "motherId": null,
@@ -43,7 +43,7 @@
     "id": "ZhuHui",
     "name": "祝辉",
     "gender": "female",
-    "info": "",
+    "info": "1940-2023",
     "spouseId": "JiangLuosheng",
     "fatherId": null,
     "motherId": null,
@@ -83,9 +83,9 @@
     "id": "LiuFang",
     "name": "单蕾",
     "gender": "female",
-    "info": "1975年生",
+    "info": "",
     "spouseId": "JiangJianjun",
-    "fatherId": "单品1749465466129",
+    "fatherId": null,
     "motherId": null,
     "tooltip": "我的母亲"
   },
@@ -93,20 +93,20 @@
     "id": "JiangSiyuan",
     "name": "蒋思源",
     "gender": "male",
-    "info": "2005年生",
+    "info": "2003年生",
     "spouseId": null,
     "fatherId": "JiangJianjun",
     "motherId": "LiuFang",
-    "tooltip": "测试信息"
+    "tooltip": "我"
   },
   {
-    "id": "单品1749465466129",
-    "name": "单品",
-    "gender": "male",
-    "info": "",
-    "fatherId": null,
+    "id": "蒋家珊1749470291082",
+    "name": "蒋家珊",
+    "gender": "female",
+    "info": "1999出生",
+    "fatherId": "JiangJianhong",
     "motherId": null,
     "spouseId": null,
-    "tooltip": ""
+    "tooltip": "香港科技大学硕士"
   }
 ]
